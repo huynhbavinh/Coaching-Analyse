@@ -17,4 +17,11 @@ const accountSchema = new Schema({
     },
 })
 
+export interface LoginResponse {
+    success: boolean,
+    error?: Array<String>,
+}
+
+// result.success
+
 export default mongoose.model("Account", accountSchema);

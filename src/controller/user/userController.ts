@@ -52,8 +52,12 @@ class UserController {
     }
   }
 
-  async login(req: Request, res: Response) {
+  async login<LoginResponse>(req: Request, res: Response) {
     let { email, password } = req.body;
+    const a: LoginResponse = {
+      b: 1,
+    }
+    return a;
     email = email.toString().trim();
     password = password.toString().trim();
     const check = await Account.findOne({ email });
