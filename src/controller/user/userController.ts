@@ -52,49 +52,49 @@ class UserController {
     }
   }
 
-  async login<LoginResponse>(req: Request, res: Response) {
-    let { email, password } = req.body;
-    const a: LoginResponse = {
-      b: 1,
-    }
-    return a;
-    email = email.toString().trim();
-    password = password.toString().trim();
-    const check = await Account.findOne({ email });
-    if (check === null) {
-      res.json({ message: "Mật khẩu không hợp lệ" });
-    } else {
-      const hashedPassword = check?.password;
-      if (typeof hashedPassword === "undefined") {
-        res.json({ message: "Mật khẩu không hợp lệ" });
-      } else {
-        try {
-          const match = bcrypt.compareSync(password, hashedPassword);
-          console.log("match", match);
+  // async login<LoginResponse>(req: Request, res: Response) {
+  //   let { email, password } = req.body;
+  //   const a: LoginResponse = {
+  //     b: 1,
+  //   }
+  //   return a;
+  //   email = email.toString().trim();
+  //   password = password.toString().trim();
+  //   const check = await Account.findOne({ email });
+  //   if (check === null) {
+  //     res.json({ message: "Mật khẩu không hợp lệ" });
+  //   } else {
+  //     const hashedPassword = check?.password;
+  //     if (typeof hashedPassword === "undefined") {
+  //       res.json({ message: "Mật khẩu không hợp lệ" });
+  //     } else {
+  //       try {
+  //         const match = bcrypt.compareSync(password, hashedPassword);
+  //         console.log("match", match);
 
-          if (match) {
-            const tokens = generateTokens(check.toJSON());
-            updateRefreshToken(email, tokens.refreshToken);
+  //         if (match) {
+  //           const tokens = generateTokens(check.toJSON());
+  //           updateRefreshToken(email, tokens.refreshToken);
 
-            res.cookie("token", tokens.accessToken, { httpOnly: true });
-            res.cookie("refreshToken", tokens.refreshToken, {
-              httpOnly: true,
-              expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
-            });
+  //           res.cookie("token", tokens.accessToken, { httpOnly: true });
+  //           res.cookie("refreshToken", tokens.refreshToken, {
+  //             httpOnly: true,
+  //             expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
+  //           });
 
-            // res.redirect("/login/getCookie");
-            res.json({message: "Đăng nhập thành công", check, tokens});
-            // res.json({ message: "Đăng nhập thành công", check });
-          } else {
-            res.json({ message: "Sai mật khẩu" });
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+  //           // res.redirect("/login/getCookie");
+  //           res.json({message: "Đăng nhập thành công", check, tokens});
+  //           // res.json({ message: "Đăng nhập thành công", check });
+  //         } else {
+  //           res.json({ message: "Sai mật khẩu" });
+  //         }
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     }
 
-    }
-  }
+  //   }
+  // }
   // async logout(req: Request, res: Response) {
   //   const check = await Account.findOne({ email: req.UserEmail });
   //   updateRefreshToken(check?.email, null);
