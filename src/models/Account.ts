@@ -22,6 +22,15 @@ export interface LoginResponse {
     error?: Array<String>,
 }
 
+export interface Accounts extends Array<Account> { }
+
+interface Account {
+    _id: number,
+    username: string,
+    email: string,
+    password: string,
+}
+
 // result.success
 
 export default mongoose.model("Account", accountSchema);

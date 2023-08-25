@@ -20,7 +20,7 @@ connect();
  
 const app: express.Application = express();
 app.use(cookieParser());
-app.use(verifyToken);
+// app.use(verifyToken);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
  

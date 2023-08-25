@@ -1,9 +1,8 @@
-{
-   "_id": {
-     "$oid": "64e6efa79b973939acd4b7d9"
-   },
-   "username": "khanh",
-   "email": "dinhtankhanh14@gmail.com",
-   "password": "$2b$10$yV7smOSdWwOa/QVCVri8eecd4wE/1yt4lfAbQJyFBycHymuvPdRdC",
-   "__v": 0
- }
+[
+  {
+    "_id": 1,
+    "username": "khanh",
+    "email": "dinhtankhanh14@gmail.com",
+    "password": "$2b$10$yV7smOSdWwOa/QVCVri8eecd4wE/1yt4lfAbQJyFBycHymuvPdRdC"
+  }
+]

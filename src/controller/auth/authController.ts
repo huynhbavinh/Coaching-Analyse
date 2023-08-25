@@ -6,63 +6,55 @@ import bcrypt from 'bcrypt';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import config from '../../config/config';
-interface UserData {
-    email: string;
-    password: string;
-}
+import { Accounts } from '../../models/Account';
+import { LoginResponse } from '../../models/Account'
 // Create tokens
 const generateTokens = (payload: { email: any; password: any; }) => {
     const { email, password } = payload;
     const accessToken = jwt.sign(
-      { email, password },
-      config.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: "1h",
-      }
+        { email, password },
+        config.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: "1h",
+        }
     );
     // const refreshToken = jwt.sign({ email }, config.REFRESH_TOKEN_SECRET, {
     //   expiresIn: "1h",
     // });
     // return { accessToken, refreshToken };
-  };
-  
+};
+
 //   const updateRefreshToken = async (email: any, refreshToken: any) => {
 //     await Account.findOneAndUpdate({ email }, { refreshToken });
 //   };
 
-export async function login<LoginResponse>(req: Request, res: Response) {
-    const { email, password } = req.body;
+export async function login(email: string, password: string) {
     // Đường dẫn đến file JSON
-    const filePath = '../../dummyData/user.storage.json';
-    // Đọc dữ liệu hiện có trong file JSON (nếu có)
-    // let jsonData = [];
-    // if (fs.existsSync(filePath)) {
-    //     const rawData = fs.readFileSync(filePath);
-    //     jsonData = JSON.parse(rawData.toString());
-    // }
-    if (!fs.existsSync(filePath)) {
-        res.status(500).json({ success: false, message: "Không tìm thấy dữ liệu người dùng" });
-        return;
+    const filePath = 'D:\\code\\Coaching Analyse\\src\\dummyData\\user.storage.json';
+    const accounts: Accounts = JSON.parse(fs.readFileSync(filePath).toString()) || [];
+    if (accounts.length === 0) {
+        const a: LoginResponse = { success: false, error: ["Không tìm thấy dữ liệu người dùng"] };
+        return a;
     }
     try {
-        const rawData = fs.readFileSync(filePath);
-        const jsonData: UserData[] = JSON.parse(rawData.toString());
-        const user = jsonData.find(userData => userData.email === email);
+        const user = accounts.find(account => account.email === email);
         if (!user) {
-            res.status(401).json({ success: false, message: "Email không tồn tại" });
-            return;
+            const a: LoginResponse = { success: false, error: ["Email không tồn tại"] };
+            return a;
         }
 
         const match = bcrypt.compareSync(password, user.password);
-        console.log("match", match);
         if (match) {
-            const tokens = generateTokens(user);
-            res.status(200).json({ success: true, message: "Đăng nhập thành công", tokens });
+            // const tokens = generateTokens(user);
+            const a: LoginResponse = { success: true, error: ["Đăng nhập thành công"] };
+            return a;
         } else {
-            res.status(401).json({ success: false, message: "Mật khẩu không đúng" });
+            const a: LoginResponse = { success: false, error: ["Mật khẩu không đúng"] };
+            return a;
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+        const a: LoginResponse = { success: false, error: ['Unexpected error'] };
+        return a
     }
 }
